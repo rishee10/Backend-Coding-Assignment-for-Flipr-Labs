@@ -38,7 +38,7 @@ Setup
 Clone the Repository:
 
 
-git clone https://github.com/rishee10/Backend-Coding-Assignment-for-Flipr-Labs/tree/main/myproject
+git clone https://github.com/rishee10/Backend-Coding-Assignment-for-Flipr-Labs/tree/main
 cd myproject
 
 Create a Virtual Environment:
