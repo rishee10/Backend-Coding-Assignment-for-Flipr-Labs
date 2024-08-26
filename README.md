@@ -10,19 +10,19 @@ User Authentication:
 Sign Up
 Sign In
 Password Hashing and Security
-Product Management:
 
+Product Management:
 Add Product
 Update Product
 Delete Product
 View All Products
-Cart Management:
 
+Cart Management:
 Add Product to Cart
 Remove Product from Cart
 View Cart
-Order Management:
 
+Order Management:
 Place Order
 View Orders
 
