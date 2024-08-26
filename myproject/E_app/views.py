@@ -136,42 +136,42 @@ class OrderView(views.APIView):
 
 
 
-def signup_view(request):
-    if request.method == 'POST':
-        form = SignUpForm(request.POST)
-        if form.is_valid():
-            user = CustomUser(
-                email=form.cleaned_data['email'],
-                name=form.cleaned_data['name'],
-                address=form.cleaned_data['address'],
-                password=make_password(form.cleaned_data['password'])
-            )
-            user.save()
-            login(request, user)
-            return redirect('product_list')
-    else:
-        form = SignUpForm()
-    return render(request, 'shop/signup.html', {'form': form})
+# # def signup_view(request):
+#     if request.method == 'POST':
+#         form = SignUpForm(request.POST)
+#         if form.is_valid():
+#             user = CustomUser(
+#                 email=form.cleaned_data['email'],
+#                 name=form.cleaned_data['name'],
+#                 address=form.cleaned_data['address'],
+#                 password=make_password(form.cleaned_data['password'])
+#             )
+#             user.save()
+#             login(request, user)
+#             return redirect('product_list')
+#     else:
+#         form = SignUpForm()
+#     # return render(request, 'shop/signup.html', {'form': form})
 
 
 
 
 
-def signin_view(request):
-    if request.method == 'POST':
-        form = SignInForm(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-            user = authenticate(request, username=email, password=password)
-            if user is not None:
-                login(request, user)
-                return redirect('product_list')
-            else:
-                form.add_error(None, "Invalid email or password.")
-    else:
-        form = SignInForm()
-    return render(request, 'shop/signin.html', {'form': form})
+# def signin_view(request):
+#     if request.method == 'POST':
+#         form = SignInForm(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             password = form.cleaned_data['password']
+#             user = authenticate(request, username=email, password=password)
+#             if user is not None:
+#                 login(request, user)
+#                 return redirect('product_list')
+#             else:
+#                 form.add_error(None, "Invalid email or password.")
+#     else:
+#         form = SignInForm()
+#     return render(request, 'shop/signin.html', {'form': form})
 
 
 
