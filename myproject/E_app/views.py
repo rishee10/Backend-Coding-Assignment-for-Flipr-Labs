@@ -1,6 +1,3 @@
-from django.shortcuts import render
-
-# Create your views here.
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -10,6 +7,17 @@ from rest_framework.response import Response
 from rest_framework import status, permissions, views
 from django.contrib.auth.hashers import make_password
 from .serializers import ProductSerializer, CartSerializer, OrderSerializer
+from .models import Product
+from rest_framework import generics
+from rest_framework.permissions import IsAdminUser
+from .serializers import CartSerializer
+from rest_framework.views import APIView
+from .models import Cart, CartItem, Product
+
+
+
+from .forms import SignUpForm, SignInForm, ProductForm, CartAddForm
+
 class SignUpView(views.APIView):
     def post(self, request):
         form = SignUpForm(request.data)
@@ -47,10 +55,7 @@ class LogoutView(views.APIView):
         return Response({'message': 'Logout successful'}, status=status.HTTP_200_OK)
 
 
-from .models import Product
-from .serializers import ProductSerializer
-from rest_framework import generics
-from rest_framework.permissions import IsAdminUser
+
 
 class ProductListView(generics.ListAPIView):
     queryset = Product.objects.all()
@@ -81,17 +86,6 @@ class ProductDetailView(generics.GenericAPIView):
         return Response({'message': 'Product deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
-from .models import Cart, CartItem
-from .serializers import CartSerializer
-from rest_framework import permissions, views
-from rest_framework.response import Response
-from rest_framework import status
-
-from rest_framework import permissions, status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .models import Cart, CartItem, Product
-from .serializers import CartSerializer
 
 class CartView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -130,21 +124,17 @@ class OrderView(views.APIView):
         cart = Cart.objects.get(user=user)
         if not cart.items.exists():
             return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
-        # Order creation logic (simplified)
+       
         order_id = 'ORD' + str(cart.id)
-        cart.items.all().delete()  # Clear cart after placing the order
+        cart.items.all().delete()  
         return Response({'message': 'Order placed successfully', 'order_id': order_id}, status=status.HTTP_201_CREATED)
 
     def get(self, request):
         user = request.user
-        # Assuming you have an Order model to track orders
-        # orders = Order.objects.filter(user=user)
-        # For simplicity, returning a placeholder message
+        
         return Response({'message': 'Retrieve orders for user'}, status=status.HTTP_200_OK)
 
-from django.shortcuts import render, redirect
-from .forms import SignUpForm, SignInForm, ProductForm, CartAddForm
-from django.contrib.auth import authenticate, login
+
 
 def signup_view(request):
     if request.method == 'POST':
@@ -165,9 +155,7 @@ def signup_view(request):
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from .forms import SignInForm
+
 
 def signin_view(request):
     if request.method == 'POST':
@@ -185,19 +173,7 @@ def signin_view(request):
         form = SignInForm()
     return render(request, 'shop/signin.html', {'form': form})
 
-# def signin_view(request):
-#     if request.method == 'POST':
-#         form = SignInForm(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             password = form.cleaned_data['password']
-#             user = authenticate(request, email=email, password=password)
-#             if user is not None:
-#                 login(request, user)
-#                 return redirect('product_list')
-#     else:
-#         form = SignInForm()
-#     return render(request, 'shop/signin.html', {'form': form})
+
 
 def add_product_view(request):
     if request.method == 'POST':
@@ -232,7 +208,7 @@ class OrderView(views.APIView):
         cart = Cart.objects.get(user=user)
         if not cart.items.exists():
             return Response({'error': 'Cart is empty'}, status=status.HTTP_400_BAD_REQUEST)
-        # Create an order
+        
         order = Order.objects.create(
             user=user,
             shipping_address=user.address
